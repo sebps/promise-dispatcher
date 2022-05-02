@@ -14,9 +14,9 @@ A lightweight library to manage promises according to settings such as processin
 <!-- /TOC -->
 
 ## Features
-- Promise processing mode - management of the promises execution order ( FIFO queue or LIFO stack ) 
-- Time Interval - time interval used to calculate promise execution rate ( default to 1 second )  
-- Rate execution -  management of the promise execution rate ( max promise per time interval )
+- Promise processing mode - management of the promises dispatching order ( FIFO queue or LIFO stack ) 
+- Time Interval - time interval used to calculate promise dispatching rate ( default to 1 second )  
+- Rate dispatching -  management of the promise dispatching rate ( max promise per time interval )
 
 ## Installation
 
@@ -36,8 +36,8 @@ const PromiseDispatcher = require('promise-dispatcher');
 const promiseDispatcher = new PromiseDispatcher(tasks, mode = "QUEUE", rate = 1, interval = 1000)
 ```
 
-### Register a new promise
-To register a new promise in a promise dispatcher instance, it must be wrapped into a provider function that return the promise so that it can be executed whenever necessary by the promise dispatcher
+### Dispatch a new promise
+To dispatch a new promise in a promise dispatcher instance, it must be wrapped into a provider function that return the promise so that it can be executed whenever necessary by the promise dispatcher
 
 ```js
 const promiseProvider = function() { 
@@ -47,21 +47,21 @@ const promiseProvider = function() {
     })
 }
 
-promiseDispatcher.registerPromise(promiseProvider)
+promiseDispatcher.dispatchPromise(promiseProvider)
 ```
 
-### startExecution
-A promise dispatcher instance starts to process promises once its startExecution method is called
+### startDispatching
+A promise dispatcher instance starts to process promises once its startDispatching method is called
 
 ```js
-promiseDispatcher.startExecution()
+promiseDispatcher.startDispatching()
 ```
 
-### stopExecution
-A promise dispatcher instance stops to process promises once its stopExecution method is called
+### stopDispatching
+A promise dispatcher instance stops to process promises once its stopDispatching method is called
 
 ```js
-promiseDispatcher.stopExecution()
+promiseDispatcher.stopDispatching()
 ```
 
 ## Examples
@@ -82,12 +82,12 @@ const promiseProviders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function(value) {
 ```js
 (async function() {
   const promiseDispatcher = promiseDispatcher.new("QUEUE", rate, interval)
-  promiseDispatcher.startExecution()
-  promiseDispatcher.registerPromises(promiseProviders)
+  promiseDispatcher.startDispatching()
+  promiseDispatcher.dispatchPromises(promiseProviders)
   // expected console logs :
   // after 0 second : 1,2,3,4,5
   // after 1 second : 6,7,8,9,10
-  promiseDispatcher.stopExecution()
+  promiseDispatcher.stopDispatching()
 })();
 ```
 
@@ -95,12 +95,12 @@ const promiseProviders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function(value) {
 ```js
 (async function() {
     const promiseDispatcher = promiseDispatcher.new("STACK", rate, interval)
-    promiseDispatcher.startExecution()
-    promiseDispatcher.registerPromises(tasks)
+    promiseDispatcher.startDispatching()
+    promiseDispatcher.dispatchPromises(tasks)
     // expected console logs :
     // after 0 second : 10,9,8,7,6
     // after 1 second : 5,4,3,2,1
-    promiseDispatcher.stopExecution()
+    promiseDispatcher.stopDispatching()
 })();
 ```
 

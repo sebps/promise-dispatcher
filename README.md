@@ -73,6 +73,7 @@ const promiseProviders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function(value) {
     return function () {
         return new Promise((resolve, reject) => {
             console.log(value)
+            resolve(value)
         });
     };
 });
@@ -83,10 +84,13 @@ const promiseProviders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function(value) {
 (async function() {
   const promiseDispatcher = promiseDispatcher.new("QUEUE", rate, interval)
   promiseDispatcher.startDispatching()
-  promiseDispatcher.dispatchPromises(promiseProviders)
+  const promises = promiseDispatcher.dispatchPromises(promiseProviders)
   // expected console logs :
   // after 0 second : 1,2,3,4,5
   // after 1 second : 6,7,8,9,10
+  const results = await Promise.all(promises)
+  console.log(results)
+ // expect results to be : 1,2,3,4,5,6,7,8,9,10
   promiseDispatcher.stopDispatching()
 })();
 ```
@@ -96,10 +100,13 @@ const promiseProviders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function(value) {
 (async function() {
     const promiseDispatcher = promiseDispatcher.new("STACK", rate, interval)
     promiseDispatcher.startDispatching()
-    promiseDispatcher.dispatchPromises(tasks)
+    const promises = promiseDispatcher.dispatchPromises(tasks)
     // expected console logs :
     // after 0 second : 10,9,8,7,6
     // after 1 second : 5,4,3,2,1
+    const results = await Promise.all(promises)
+    console.log(results)
+   // expect results to be : 10,9,8,7,6,5,4,3,2,1
     promiseDispatcher.stopDispatching()
 })();
 ```

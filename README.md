@@ -1,4 +1,4 @@
-# PromiseManager
+# PromiseDispatcher
 
 promise-dispatcher
 ==========
@@ -28,16 +28,16 @@ $ npm install promise-dispatcher
 
 ### Loading the module
 ```js
-const PromiseManager = require('promise-dispatcher');
+const PromiseDispatcher = require('promise-dispatcher');
 ```
 
-### Creating a new promise manager instance
+### Creating a new promise dispatcher instance
 ```js
-const promiseManager = new PromiseManager(tasks, mode = "QUEUE", rate = 1, interval = 1000)
+const promiseDispatcher = new PromiseDispatcher(tasks, mode = "QUEUE", rate = 1, interval = 1000)
 ```
 
 ### Register a new promise
-To register a new promise in a promise manager instance, it must be wrapped into a provider function that return the promise so that it can be executed whenever necessary by the promise manager
+To register a new promise in a promise dispatcher instance, it must be wrapped into a provider function that return the promise so that it can be executed whenever necessary by the promise dispatcher
 
 ```js
 const promiseProvider = function() { 
@@ -47,21 +47,21 @@ const promiseProvider = function() {
     })
 }
 
-promiseManager.registerPromise(promiseProvider)
+promiseDispatcher.registerPromise(promiseProvider)
 ```
 
 ### startExecution
-A promise manager instance starts to process promises once its startExecution method is called
+A promise dispatcher instance starts to process promises once its startExecution method is called
 
 ```js
-promiseManager.startExecution()
+promiseDispatcher.startExecution()
 ```
 
 ### stopExecution
-A promise manager instance stops to process promises once its stopExecution method is called
+A promise dispatcher instance stops to process promises once its stopExecution method is called
 
 ```js
-promiseManager.stopExecution()
+promiseDispatcher.stopExecution()
 ```
 
 ## Examples
@@ -81,26 +81,26 @@ const promiseProviders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function(value) {
 ### Queue mode
 ```js
 (async function() {
-  const promiseManager = promiseManager.new("QUEUE", rate, interval)
-  promiseManager.startExecution()
-  promiseManager.registerPromises(promiseProviders)
+  const promiseDispatcher = promiseDispatcher.new("QUEUE", rate, interval)
+  promiseDispatcher.startExecution()
+  promiseDispatcher.registerPromises(promiseProviders)
   // expected console logs :
   // after 0 second : 1,2,3,4,5
   // after 1 second : 6,7,8,9,10
-  promiseManager.stopExecution()
+  promiseDispatcher.stopExecution()
 })();
 ```
 
 ### Stack mode
 ```js
 (async function() {
-    const promiseManager = promiseManager.new("STACK", rate, interval)
-    promiseManager.startExecution()
-    promiseManager.registerPromises(tasks)
+    const promiseDispatcher = promiseDispatcher.new("STACK", rate, interval)
+    promiseDispatcher.startExecution()
+    promiseDispatcher.registerPromises(tasks)
     // expected console logs :
     // after 0 second : 10,9,8,7,6
     // after 1 second : 5,4,3,2,1
-    promiseManager.stopExecution()
+    promiseDispatcher.stopExecution()
 })();
 ```
 

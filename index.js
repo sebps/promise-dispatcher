@@ -56,8 +56,7 @@ class PromiseDispatcher {
             // launch new task executions to fill current interval according to required rate
             while (this.tasks.length > 0 && (!this.rate || this.ticks.length < this.rate)) {
                 // fetch next task
-                const { promiseProvider, resolve, reject } = this.tasks.pop()
-                
+                const { promiseProvider, resolve, reject } = this.tasks.pop()  
                 // trigger task execution 
                 const executedPromise = promiseProvider()
                 // bind resolve and reject to wrapping promise
